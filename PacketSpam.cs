@@ -1,35 +1,38 @@
-﻿using System.Net;
+﻿using System;
 using System.Net.Sockets;
-using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
-using XSLibrary.Utility;
 
 namespace HostileClient
 {
-    class CryptoHandshakeSpam : ConnectionSpam
+    abstract class PacketSpam : ConnectionSpam
     {
-        ConnectionInterface Connection;
+        protected TCPPacketConnection Connection { get; set; }
+        public int Length { get; set; } = 65;
 
-        public CryptoHandshakeSpam()
+        public PacketSpam()
         {
         }
 
         protected override void CreateActions(Socket socket)
         {
-
             Connection = new TCPPacketConnection(socket);
             Connection.Logger = Logger;
         }
 
         protected override void InitActions()
         {
-            IConnectionCrypto Crypto = new ECCrypto(true);
-            Connection.InitializeCrypto(Crypto);
+        }
+
+        protected override void ExecutionActions()
+        {
+            Connection.Send(CreateData(Length));
         }
 
         protected override void CleanUpActions()
         {
             Connection.Disconnect();
         }
+
+        protected abstract byte[] CreateData(int length);
     }
 }

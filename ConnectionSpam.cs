@@ -1,8 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using XSLibrary.Utility;
-using XSLibrary.Network.Connections;
-using XSLibrary.Cryptography.ConnectionCryptos;
 
 namespace HostileClient
 {
@@ -11,7 +9,6 @@ namespace HostileClient
         public EndPoint Target { get; set; }
         public int Count { get; set; } = 1;
         public Logger Logger { get; set; } = new NoLog();
-        protected ConnectionInterface Connection { get; set; }
 
         public ConnectionSpam()
         {
@@ -26,14 +23,32 @@ namespace HostileClient
                 Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 socket.Connect(Target);
 
-                PostConnectActions(socket);
+                CreateActions(socket);
 
-                if(Connection != null && Connection.Connected)
-                    Connection.Disconnect();
+                InitActions();
+
+                ExecutionActions();
+
+                CleanUpActions();
             }
         }
 
-        protected virtual void PostConnectActions(Socket socket)
+        protected virtual void CreateActions(Socket socket)
+        {
+
+        }
+
+        protected virtual void InitActions()
+        {
+
+        }
+
+        protected virtual void ExecutionActions()
+        {
+
+        }
+
+        protected virtual void CleanUpActions()
         {
 
         }
