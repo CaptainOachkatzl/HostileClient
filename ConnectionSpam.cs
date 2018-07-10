@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using XSLibrary.Utility;
+using XSLibrary.Network.Connections;
+using XSLibrary.Cryptography.ConnectionCryptos;
 
 namespace HostileClient
 {
@@ -19,10 +21,15 @@ namespace HostileClient
             for (int i = 0; i < Count; i++)
             {
                 Logger.Log("Connecting #{0}", i);
+
                 Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 socket.Connect(Target);
-                socket.Disconnect(false);
-                socket.Dispose();
+
+                IConnectionCrypto Crypto = new ECOpenSSLCrypto(true);
+                TCPPacketConnection connection = new TCPPacketConnection(socket);
+                connection.Logger = Logger;
+                connection.InitializeCrypto(Crypto);
+                connection.Disconnect();
             }
         }
     }
