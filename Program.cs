@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using XSLibrary.Utility;
 
 namespace HostileClient
 {
@@ -7,15 +8,15 @@ namespace HostileClient
     {
         static void Main(string[] args)
         {
-            Console.In.ReadLine();
+            while (Console.In.ReadLine() != "exit")
+            {
+                ConnectionSpam connectionSpam = new ConnectionSpam();
+                connectionSpam.Logger = new LoggerConsole();
+                connectionSpam.Count = 100;
+                connectionSpam.Target = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 22222);
 
-            ConnectionSpam connectionSpam = new ConnectionSpam();
-            connectionSpam.Count = 100;
-            connectionSpam.Target = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 22222);
-
-            connectionSpam.Run();
-
-            Console.In.ReadLine();
+                connectionSpam.Run();
+            }
         }
     }
 }
