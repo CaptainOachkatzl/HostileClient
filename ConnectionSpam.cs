@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using XSLibrary.Utility;
 
 namespace HostileClient
 {
@@ -7,6 +8,7 @@ namespace HostileClient
     {
         public EndPoint Target { get; set; }
         public int Count { get; set; } = 1;
+        public Logger Logger { get; set; } = new NoLog();
 
         public ConnectionSpam()
         {
@@ -16,6 +18,7 @@ namespace HostileClient
         {
             for (int i = 0; i < Count; i++)
             {
+                Logger.Log("Connecting #{0}", i);
                 Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 socket.Connect(Target);
                 socket.Disconnect(false);
