@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="ConnectionSpam.cs" />
     <Compile Include="BigDataSpam.cs" />
+    <Compile Include="UDPSpam.cs" />
     <Compile Include="RandomDataSpam.cs" />
     <Compile Include="PacketSpam.cs" />
     <Compile Include="CryptoHandshakeSpam.cs" />
