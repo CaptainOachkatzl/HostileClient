@@ -21,8 +21,7 @@ namespace HostileClient
 
             symbol = (byte)'B';
             Data2 = CreateData(Length);
-
-            Connection.MaxPackageSendSize = 1024;
+            
             Connection.InitializeCrypto(new ECCrypto(true));
         }
 
