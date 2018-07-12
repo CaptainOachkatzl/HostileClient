@@ -8,7 +8,7 @@ namespace HostileClient
 {
     class CryptoHandshakeSpam : ConnectionSpam
     {
-        ConnectionInterface Connection;
+        IConnection Connection;
 
         public CryptoHandshakeSpam()
         {

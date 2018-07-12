@@ -11,7 +11,7 @@ namespace HostileClient
         byte[] Data2;
         public BigDataSpam()
         {
-            Length = 16 * 1024 * 1024;
+            Length = 1024;
         }
 
         protected override void InitActions()

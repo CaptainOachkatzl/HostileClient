@@ -42,12 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionSpam.cs" />
-    <Compile Include="BigDataSpam.cs" />
-    <Compile Include="UDPSpam.cs" />
-    <Compile Include="RandomDataSpam.cs" />
-    <Compile Include="PacketSpam.cs" />
-    <Compile Include="CryptoHandshakeSpam.cs" />
+    <Compile Include="DualConnection.cs" />
+    <Compile Include="Spam\ConnectionSpam.cs" />
+    <Compile Include="Spam\BigDataSpam.cs" />
+    <Compile Include="Spam\UDPSpam.cs" />
+    <Compile Include="Spam\RandomDataSpam.cs" />
+    <Compile Include="Spam\PacketSpam.cs" />
+    <Compile Include="Spam\CryptoHandshakeSpam.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
