@@ -11,14 +11,14 @@ namespace HostileClient
     {
         public event IConnection.CommunicationErrorHandler OnDisconnect;
 
-        TCPConnection tcpConnetion;
+        TCPPacketConnection tcpConnetion;
         UDPConnection udpConnection;
 
         public Logger Logger { get; set; } = new NoLog();
 
         public DualConnection(Socket socket, IPAddress ip = null)
         {
-            tcpConnetion = new TCPConnection(socket);
+            tcpConnetion = new TCPPacketConnection(socket);
 
             if (ip != null)
                 udpConnection = new UDPConnection(new IPEndPoint(ip, (socket.LocalEndPoint as IPEndPoint).Port));
@@ -42,11 +42,14 @@ namespace HostileClient
             udpConnection.Logger = Logger;
             tcpConnetion.Logger = Logger;
 
-            if(!udpConnection.InitializeCrypto(new ECCrypto(active)))
+            if (!udpConnection.InitializeCrypto(new ECCrypto(active)))
             {
                 tcpConnetion.Disconnect();
                 return;
             }
+
+            if (!tcpConnetion.InitializeCrypto(new ECCrypto(active)))
+                return;
 
             tcpConnetion.InitializeReceiving();
             udpConnection.InitializeReceiving();
@@ -64,8 +67,6 @@ namespace HostileClient
 
         public void SendDual(byte[] data)
         {
-
-
             SendTCP(data);
             SendUDP(data);
         }
