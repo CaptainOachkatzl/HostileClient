@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
 using XSLibrary.Utility;
@@ -13,7 +15,8 @@ namespace HostileClient
         static Logger logger = new LoggerConsole();
         static DualConnection dualConnection = null;
         static TCPPacketConnection packetConnection = null;
-
+        static Thread[] threads = new Thread[8];
+        static bool m_abort = false;
 
         static void Main(string[] args)
         {
@@ -28,6 +31,10 @@ namespace HostileClient
             {
                 Disconnect();
 
+                //Thread.Sleep(1000);
+
+                m_abort = false;
+
                 logger.Log("Connecting...");
 
                 Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -36,7 +43,17 @@ namespace HostileClient
                 packetConnection = new TCPPacketConnection(socket);
                 packetConnection.Logger = logger;
                 packetConnection.InitializeCrypto(new ECCrypto(true));
-                packetConnection.Send(new byte[] { 0, 1, 2, 3 });
+
+                
+                for (int i = 0; i < threads.Length; i++)
+                {
+                    threads[i] = new Thread(SendLoop);
+                    threads[i].Start();
+                }
+
+                Thread.Sleep(5000);
+
+                Disconnect();
 
                 //dualConnection = new DualConnection(socket);
                 //dualConnection.Logger = logger;
@@ -57,6 +74,14 @@ namespace HostileClient
             Disconnect();
         }
 
+        static private void SendLoop()
+        {
+            while(!m_abort)
+            {
+                packetConnection.Send(RandomDataSpam.GenerateRandomData(100)/*Encoding.ASCII.GetBytes("Hallo Adrian")*/);
+            }
+        }
+
         static private void HandleDisconnect(object sender, EndPoint remote)
         {
             logger.Log("Dualconnection disconnected.\n\n");
@@ -64,6 +89,10 @@ namespace HostileClient
 
         static private void Disconnect()
         {
+            m_abort = true;
+            foreach (Thread thread in threads)
+                thread?.Join();
+
             if (packetConnection != null)
                 packetConnection.Disconnect();
 
