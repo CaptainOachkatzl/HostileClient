@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{82407C10-5309-444C-9A0B-DF629D7872AD}</ProjectGuid>
+    <ProjectGuid>{47BC8AD8-089A-4E38-905E-F12CAEFEAF2E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>HostileClient</RootNamespace>
-    <AssemblyName>HostileClient</AssemblyName>
+    <RootNamespace>DummyServer</RootNamespace>
+    <AssemblyName>DummyServer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,13 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DualConnection.cs" />
-    <Compile Include="Spam\ConnectionSpam.cs" />
-    <Compile Include="Spam\BigDataSpam.cs" />
-    <Compile Include="Spam\UDPSpam.cs" />
-    <Compile Include="Spam\RandomDataSpam.cs" />
-    <Compile Include="Spam\PacketSpam.cs" />
-    <Compile Include="Spam\CryptoHandshakeSpam.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -56,15 +49,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="XSLibrary\XSLibrary\XSCryptography\XSCryptography.csproj">
-      <Project>{1b219104-b11e-49e4-861f-5200520fb9e9}</Project>
-      <Name>XSCryptography</Name>
+    <ProjectReference Include="..\HostileClient\HostileClient.csproj">
+      <Project>{82407c10-5309-444c-9a0b-df629d7872ad}</Project>
+      <Name>HostileClient</Name>
     </ProjectReference>
-    <ProjectReference Include="XSLibrary\XSLibrary\XSNetwork\XSNetwork.csproj">
+    <ProjectReference Include="..\XSLibrary\XSLibrary\XSNetwork\XSNetwork.csproj">
       <Project>{36a1d62e-ea81-4b77-ab0b-6753a7f394ed}</Project>
       <Name>XSNetwork</Name>
     </ProjectReference>
-    <ProjectReference Include="XSLibrary\XSLibrary\XSUtility\XSUtility.csproj">
+    <ProjectReference Include="..\XSLibrary\XSLibrary\XSThreadSafety\XSThreadSafety.csproj">
+      <Project>{1364168D-0353-49F5-9DAC-2A501FD8055A}</Project>
+      <Name>XSThreadSafety</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XSLibrary\XSLibrary\XSUtility\XSUtility.csproj">
       <Project>{A37C8BF1-08E7-46BB-8F9E-536A82365FED}</Project>
       <Name>XSUtility</Name>
     </ProjectReference>

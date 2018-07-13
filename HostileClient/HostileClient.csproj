@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{82407C10-5309-444C-9A0B-DF629D7872AD}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>HostileClient</RootNamespace>
+    <AssemblyName>HostileClient</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DualConnection.cs" />
+    <Compile Include="Spam\ConnectionSpam.cs" />
+    <Compile Include="Spam\BigDataSpam.cs" />
+    <Compile Include="Spam\UDPSpam.cs" />
+    <Compile Include="Spam\RandomDataSpam.cs" />
+    <Compile Include="Spam\PacketSpam.cs" />
+    <Compile Include="Spam\CryptoHandshakeSpam.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XSLibrary\XSLibrary\XSCryptography\XSCryptography.csproj">
+      <Project>{1b219104-b11e-49e4-861f-5200520fb9e9}</Project>
+      <Name>XSCryptography</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XSLibrary\XSLibrary\XSNetwork\XSNetwork.csproj">
+      <Project>{36a1d62e-ea81-4b77-ab0b-6753a7f394ed}</Project>
+      <Name>XSNetwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XSLibrary\XSLibrary\XSUtility\XSUtility.csproj">
+      <Project>{A37C8BF1-08E7-46BB-8F9E-536A82365FED}</Project>
+      <Name>XSUtility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

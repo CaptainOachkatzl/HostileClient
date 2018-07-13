@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostileClient", "HostileClient.csproj", "{82407C10-5309-444C-9A0B-DF629D7872AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostileClient", "HostileClient\HostileClient.csproj", "{82407C10-5309-444C-9A0B-DF629D7872AD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSUtility", "XSLibrary\XSLibrary\XSUtility\XSUtility.csproj", "{A37C8BF1-08E7-46BB-8F9E-536A82365FED}"
 EndProject
@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSNetwork", "XSLibrary\XSLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedOpenSsl", "XSLibrary\openssl-net\ManagedOpenSsl\ManagedOpenSsl.csproj", "{73DCC218-655B-485F-8EAC-0CE5F2F7343D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyServer", "..\DummyServer\DummyServer.csproj", "{47BC8AD8-089A-4E38-905E-F12CAEFEAF2E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyServer", "DummyServer\DummyServer.csproj", "{47BC8AD8-089A-4E38-905E-F12CAEFEAF2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
