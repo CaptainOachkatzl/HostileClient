@@ -20,7 +20,7 @@ namespace HostileClient
 
         static void Main(string[] args)
         {
-            IPEndPoint target = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 22222);
+            IPEndPoint target = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1234);
             int count = 1;
 
             List<ConnectionSpam> spams = new List<ConnectionSpam>();
@@ -38,22 +38,22 @@ namespace HostileClient
                 logger.Log("Connecting...");
 
                 Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                socket.Connect("127.0.0.1", 22222);
+                socket.Connect(target);
 
                 packetConnection = new TCPPacketConnection(socket);
                 packetConnection.Logger = logger;
-                packetConnection.InitializeCrypto(new ECCrypto(true));
+                packetConnection.InitializeCrypto(new RSACrypto(true));
 
                 
-                for (int i = 0; i < threads.Length; i++)
-                {
-                    threads[i] = new Thread(SendLoop);
-                    threads[i].Start();
-                }
+                //for (int i = 0; i < threads.Length; i++)
+                //{
+                //    threads[i] = new Thread(SendLoop);
+                //    threads[i].Start();
+                //}
 
-                Thread.Sleep(5000);
+                //Thread.Sleep(5000);
 
-                Disconnect();
+                //Disconnect();
 
                 //dualConnection = new DualConnection(socket);
                 //dualConnection.Logger = logger;
