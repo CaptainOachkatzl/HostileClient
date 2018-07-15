@@ -21,7 +21,11 @@ namespace HostileClient
                 Logger.Log("Connecting #{0}", i);
 
                 Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                socket.Connect(Target);
+                try
+                {
+                    socket.Connect(Target);
+                }
+                catch { continue; }
 
                 CreateActions(socket);
 

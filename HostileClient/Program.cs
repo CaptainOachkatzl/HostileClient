@@ -15,15 +15,16 @@ namespace HostileClient
         static Logger logger = new LoggerConsole();
         static DualConnection dualConnection = null;
         static TCPPacketConnection packetConnection = null;
-        static Thread[] threads = new Thread[8];
+        static List<Thread> threads = new List<Thread>();
         static bool m_abort = false;
 
         static void Main(string[] args)
         {
-            IPEndPoint target = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1234);
+            IPEndPoint target = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 22223);
             int count = 1;
 
             List<ConnectionSpam> spams = new List<ConnectionSpam>();
+            //spams.Add(new ConnectionSpam());
             //spams.Add(new BigDataSpam());
             //spams.Add(new RandomDataSpam());
 
@@ -42,9 +43,13 @@ namespace HostileClient
 
                 packetConnection = new TCPPacketConnection(socket);
                 packetConnection.Logger = logger;
-                packetConnection.InitializeCrypto(new RSACrypto(true));
+                packetConnection.InitializeCrypto(new RSALegacyCrypto(true));
 
-                
+                //Thread keepalive = new Thread(KeepAliveLoop);
+                //threads.Add(keepalive);
+                //keepalive.Start();
+
+
                 //for (int i = 0; i < threads.Length; i++)
                 //{
                 //    threads[i] = new Thread(SendLoop);
@@ -79,6 +84,15 @@ namespace HostileClient
             while(!m_abort)
             {
                 packetConnection.Send(RandomDataSpam.GenerateRandomData(100)/*Encoding.ASCII.GetBytes("Hallo Adrian")*/);
+            }
+        }
+
+        static private void KeepAliveLoop()
+        {
+            while (!m_abort)
+            {
+                packetConnection.SendKeepAlive();
+                Thread.Sleep(1000);
             }
         }
 
