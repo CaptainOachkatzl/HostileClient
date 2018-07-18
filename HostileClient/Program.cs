@@ -6,21 +6,27 @@ using System.Text;
 using System.Threading;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
+using XSLibrary.ThreadSafety;
 using XSLibrary.Utility;
 
 namespace HostileClient
 {
     class Program
     {
+        class TestEvent : AutoInvokeEvent<object, object> { }
+
         static Logger logger = new LoggerConsole();
         static DualConnection dualConnection = null;
         static TCPPacketConnection packetConnection = null;
         static List<Thread> threads = new List<Thread>();
+        static int threadCount = 2;
         static bool m_abort = false;
+
+        static TestEvent OnRaise = new TestEvent();
 
         static void Main(string[] args)
         {
-            IPEndPoint target = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 22223);
+            IPEndPoint target = new IPEndPoint(IPAddress.Parse("80.109.174.197"), 80);
             int count = 1;
 
             List<ConnectionSpam> spams = new List<ConnectionSpam>();
@@ -49,23 +55,21 @@ namespace HostileClient
                 //threads.Add(keepalive);
                 //keepalive.Start();
 
+                Thread subscribeThread = new Thread(() => OnRaise.Event += HandleRaise);
+                Thread raiseThread = new Thread(Raise);
 
-                //for (int i = 0; i < threads.Length; i++)
-                //{
-                //    threads[i] = new Thread(SendLoop);
-                //    threads[i].Start();
-                //}
+                threads.Add(subscribeThread);
+                threads.Add(raiseThread);
+
+                for (int i = 0; i < threadCount; i++)
+                {
+                    //threads.Add(new Thread(SendLoop));
+                    threads[i].Start();
+                }
 
                 //Thread.Sleep(5000);
 
                 //Disconnect();
-
-                //dualConnection = new DualConnection(socket);
-                //dualConnection.Logger = logger;
-                //dualConnection.OnDisconnect += HandleDisconnect;
-                //dualConnection.Initialize(true);
-                //dualConnection.SendDual(new byte[] { 0, 1, 2, 3 });
-
 
                 foreach (ConnectionSpam spam in spams)
                 {
@@ -77,6 +81,16 @@ namespace HostileClient
             }
 
             Disconnect();
+        }
+
+        static private void Raise()
+        {
+            OnRaise.Invoke(null, null);
+        }
+
+        static private void HandleRaise(object sender, object args)
+        {
+            Raise();
         }
 
         static private void SendLoop()
@@ -106,6 +120,8 @@ namespace HostileClient
             m_abort = true;
             foreach (Thread thread in threads)
                 thread?.Join();
+
+            threads.Clear();
 
             if (packetConnection != null)
                 packetConnection.Disconnect();
