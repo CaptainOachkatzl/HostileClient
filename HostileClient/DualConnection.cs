@@ -9,7 +9,11 @@ namespace HostileClient
 {
     public class DualConnection
     {
-        public event IConnection.CommunicationErrorHandler OnDisconnect;
+        public event OnDisconnectEvent.EventHandle OnDisconnect
+        {
+            add { tcpConnetion.OnDisconnect += value; }
+            remove { tcpConnetion.OnDisconnect -= value; }
+        }
 
         TCPPacketConnection tcpConnetion;
         UDPConnection udpConnection;
@@ -27,7 +31,7 @@ namespace HostileClient
 
             udpConnection.SetDefaultSend(socket.RemoteEndPoint);
 
-            tcpConnetion.OnDisconnect += HandleTCPDisconnect;
+            OnDisconnect += HandleTCPDisconnect;
             tcpConnetion.DataReceivedEvent += TcpConnetion_DataReceivedEvent;
             udpConnection.DataReceivedEvent += UdpConnection_DataReceivedEvent;
         }
@@ -84,7 +88,6 @@ namespace HostileClient
         private void HandleTCPDisconnect(object sender, EndPoint remote)
         {
             udpConnection.Disconnect();
-            OnDisconnect?.Invoke(this, remote);
         }
     }
 }

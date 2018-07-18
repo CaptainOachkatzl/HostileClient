@@ -21,6 +21,7 @@ namespace HostileClient
         static List<Thread> threads = new List<Thread>();
         static int threadCount = 4;
         static bool m_abort = false;
+        static ManualResetEvent threadGo = new ManualResetEvent(false);
 
         static TestEvent OnRaise = new TestEvent();
 
@@ -42,12 +43,14 @@ namespace HostileClient
 
                 //logger.Log("Connecting...");
 
-                //Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                //socket.Connect(target);
+                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                socket.Connect(target);
 
-                //packetConnection = new TCPPacketConnection(socket);
-                //packetConnection.Logger = logger;
-                //packetConnection.InitializeCrypto(new RSALegacyCrypto(true));
+                packetConnection = new TCPPacketConnection(socket);
+                packetConnection.Logger = logger;
+                packetConnection.InitializeCrypto(new RSALegacyCrypto(true));
+                packetConnection.Disconnect();
+                packetConnection.OnDisconnect += HandleDisconnect;
 
                 threads.Add(new Thread(() => OnRaise.Event += HandleRaise));
 
@@ -86,11 +89,16 @@ namespace HostileClient
             Console.Out.WriteLine("Event raised.");
         }
 
+        static private void HandleDisconnect(object sender, EndPoint remote)
+        {
+            Console.Out.WriteLine("Disconnect event raised.");
+        }
+
         static private void SendLoop()
         {
             while(!m_abort)
             {
-                packetConnection.Send(RandomDataSpam.GenerateRandomData(100)/*Encoding.ASCII.GetBytes("Hallo Adrian")*/);
+                packetConnection.Send(RandomDataSpam.GenerateRandomData(100));
             }
         }
 
@@ -101,11 +109,6 @@ namespace HostileClient
                 packetConnection.SendKeepAlive();
                 Thread.Sleep(1000);
             }
-        }
-
-        static private void HandleDisconnect(object sender, EndPoint remote)
-        {
-            logger.Log("Dualconnection disconnected.\n\n");
         }
 
         static private void Disconnect()
