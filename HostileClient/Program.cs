@@ -19,7 +19,7 @@ namespace HostileClient
         static DualConnection dualConnection = null;
         static TCPPacketConnection packetConnection = null;
         static List<Thread> threads = new List<Thread>();
-        static int threadCount = 2;
+        static int threadCount = 4;
         static bool m_abort = false;
 
         static TestEvent OnRaise = new TestEvent();
@@ -38,35 +38,28 @@ namespace HostileClient
             {
                 Disconnect();
 
-                //Thread.Sleep(1000);
-
                 m_abort = false;
 
-                logger.Log("Connecting...");
+                //logger.Log("Connecting...");
 
-                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                socket.Connect(target);
+                //Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                //socket.Connect(target);
 
-                packetConnection = new TCPPacketConnection(socket);
-                packetConnection.Logger = logger;
-                packetConnection.InitializeCrypto(new RSALegacyCrypto(true));
+                //packetConnection = new TCPPacketConnection(socket);
+                //packetConnection.Logger = logger;
+                //packetConnection.InitializeCrypto(new RSALegacyCrypto(true));
 
-                //Thread keepalive = new Thread(KeepAliveLoop);
-                //threads.Add(keepalive);
-                //keepalive.Start();
+                threads.Add(new Thread(() => OnRaise.Event += HandleRaise));
 
-                Thread subscribeThread = new Thread(() => OnRaise.Event += HandleRaise);
-                Thread raiseThread = new Thread(Raise);
-
-                threads.Add(subscribeThread);
-                threads.Add(raiseThread);
-
-                for (int i = 0; i < threadCount; i++)
+                for (int i = 1; i < threadCount; i++)
                 {
-                    //threads.Add(new Thread(SendLoop));
-                    threads[i].Start();
+                    threads.Add(new Thread(Raise));
                 }
 
+                for (int i = 0; i < threads.Count; i++)
+                {
+                    threads[i].Start();
+                }
                 //Thread.Sleep(5000);
 
                 //Disconnect();
@@ -90,7 +83,7 @@ namespace HostileClient
 
         static private void HandleRaise(object sender, object args)
         {
-            Raise();
+            Console.Out.WriteLine("Event raised.");
         }
 
         static private void SendLoop()
