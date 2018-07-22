@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using XSLibrary.Cryptography.ConnectionCryptos;
-using XSLibrary.Network.Accepters;
+using XSLibrary.Network.Acceptors;
 using XSLibrary.Network.Connections;
 using XSLibrary.ThreadSafety.Containers;
 using XSLibrary.Utility;
@@ -16,7 +16,7 @@ namespace DummyServer
 
         static void Main(string[] args)
         {
-            TCPAccepter accepter = new TCPAccepter(1234, 10);
+            TCPAcceptor accepter = new TCPAcceptor(1234, 10);
             accepter.Logger = logger;
             accepter.ClientConnected += Accepter_ClientConnected;
             accepter.Run();
