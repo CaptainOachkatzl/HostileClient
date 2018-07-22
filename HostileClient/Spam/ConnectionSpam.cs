@@ -8,7 +8,7 @@ namespace HostileClient
     {
         public EndPoint Target { get; set; }
         public int Count { get; set; } = 1;
-        public Logger Logger { get; set; } = new NoLog();
+        public Logger Logger { get; set; } = Logger.NoLog;
 
         public ConnectionSpam()
         {
@@ -18,7 +18,7 @@ namespace HostileClient
         {
             for (int i = 0; i < Count; i++)
             {
-                Logger.Log("Connecting #{0}", i);
+                Logger.Log(LogLevel.Information, "Connecting #{0}", i);
 
                 Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 try

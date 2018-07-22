@@ -18,7 +18,7 @@ namespace HostileClient
         TCPPacketConnection tcpConnetion;
         UDPConnection udpConnection;
 
-        public Logger Logger { get; set; } = new NoLog();
+        public Logger Logger { get; set; } = Logger.NoLog;
 
         public DualConnection(Socket socket, IPAddress ip = null)
         {
@@ -77,12 +77,12 @@ namespace HostileClient
 
         private void UdpConnection_DataReceivedEvent(object sender, byte[] data, EndPoint source)
         {
-            Logger.Log("Received UDP data from {0}.", source.ToString());
+            Logger.Log(LogLevel.Information, "Received UDP data from {0}.", source.ToString());
         }
 
         private void TcpConnetion_DataReceivedEvent(object sender, byte[] data, EndPoint source)
         {
-            Logger.Log("Received TCP data from {0}.", source.ToString());
+            Logger.Log(LogLevel.Information, "Received TCP data from {0}.", source.ToString());
         }
 
         private void HandleTCPDisconnect(object sender, EndPoint remote)
