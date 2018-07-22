@@ -1,40 +1,32 @@
-﻿using System.Net;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using XSLibrary.Utility;
 
-namespace HostileClient
+namespace HostileClient.Spam
 {
-    class ConnectionSpam
+    class ConnectionSpam : ISpam
     {
-        public EndPoint Target { get; set; }
-        public int Count { get; set; } = 1;
-        public Logger Logger { get; set; } = Logger.NoLog;
-
         public ConnectionSpam()
         {
         }
 
-        public void Run()
+        protected override void SpamAction(int index)
         {
-            for (int i = 0; i < Count; i++)
+            Logger.Log(LogLevel.Information, "Connecting #{0}", index);
+
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            try
             {
-                Logger.Log(LogLevel.Information, "Connecting #{0}", i);
-
-                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                try
-                {
-                    socket.Connect(Target);
-                }
-                catch { continue; }
-
-                CreateActions(socket);
-
-                InitActions();
-
-                ExecutionActions();
-
-                CleanUpActions();
+                socket.Connect(Target);
             }
+            catch { return; }
+
+            CreateActions(socket);
+
+            InitActions();
+
+            ExecutionActions();
+
+            CleanUpActions();
         }
 
         protected virtual void CreateActions(Socket socket)

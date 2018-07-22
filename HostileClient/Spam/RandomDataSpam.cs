@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HostileClient
+namespace HostileClient.Spam
 {
     class RandomDataSpam : PacketSpam
     {

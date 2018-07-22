@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using XSLibrary.Cryptography.ConnectionCryptos;
 
-namespace HostileClient
+namespace HostileClient.Spam
 {
     class BigDataSpam : PacketSpam
     {

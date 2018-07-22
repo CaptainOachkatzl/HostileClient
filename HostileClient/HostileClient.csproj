@@ -46,6 +46,8 @@
     <Compile Include="DualConnection.cs" />
     <Compile Include="Spam\ConnectionSpam.cs" />
     <Compile Include="Spam\BigDataSpam.cs" />
+    <Compile Include="Spam\ISpam.cs" />
+    <Compile Include="Spam\LoginSpam.cs" />
     <Compile Include="Spam\UDPSpam.cs" />
     <Compile Include="Spam\RandomDataSpam.cs" />
     <Compile Include="Spam\PacketSpam.cs" />

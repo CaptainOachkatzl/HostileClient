@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using XSLibrary.Network.Connections;
 
-namespace HostileClient
+namespace HostileClient.Spam
 {
     abstract class UDPSpam : ConnectionSpam
     {

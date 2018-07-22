@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HostileClient.Spam;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -16,6 +17,8 @@ namespace HostileClient
         class TestEvent : AutoInvokeEvent<object, object> { }
 
         static Logger logger = new LoggerConsole();
+        static IPEndPoint target = new IPEndPoint(IPAddress.Parse("192.168.0.100"), 22222);
+        static List<ISpam> spams = new List<ISpam>();
         static DualConnection dualConnection = null;
         static TCPPacketConnection packetConnection = null;
         static List<Thread> threads = new List<Thread>();
@@ -27,13 +30,6 @@ namespace HostileClient
 
         static void Main(string[] args)
         {
-            IPEndPoint target = new IPEndPoint(IPAddress.Parse("80.109.174.197"), 80);
-            int count = 1;
-
-            List<ConnectionSpam> spams = new List<ConnectionSpam>();
-            //spams.Add(new ConnectionSpam());
-            //spams.Add(new BigDataSpam());
-            //spams.Add(new RandomDataSpam());
 
             while (Console.In.ReadLine() != "exit")
             {
@@ -41,42 +37,54 @@ namespace HostileClient
 
                 m_abort = false;
 
-                //logger.Log("Connecting...");
-
-                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                socket.Connect(target);
-
-                packetConnection = new TCPPacketConnection(socket);
-                packetConnection.Logger = logger;
-                packetConnection.InitializeCrypto(new RSALegacyCrypto(true));
-                packetConnection.Disconnect();
-                packetConnection.OnDisconnect += HandleDisconnect;
-
-                threads.Add(new Thread(() => OnRaise.Event += HandleRaise));
-
-                for (int i = 1; i < threadCount; i++)
-                {
-                    threads.Add(new Thread(Raise));
-                }
-
-                for (int i = 0; i < threads.Count; i++)
-                {
-                    threads[i].Start();
-                }
-                //Thread.Sleep(5000);
-
-                //Disconnect();
-
-                foreach (ConnectionSpam spam in spams)
-                {
-                    spam.Logger = logger;
-                    spam.Target = target;
-                    spam.Count = count;
-                    spam.Run();
-                }
+                RunThreads();
+                StartSpam(100);
             }
 
             Disconnect();
+        }
+
+        static void StartSpam(int count)
+        {
+            //spams.Add(new ConnectionSpam());
+            //spams.Add(new BigDataSpam());
+            //spams.Add(new RandomDataSpam());
+            spams.Add(new LoginSpam());
+
+            foreach (ISpam spam in spams)
+            {
+                spam.Logger = logger;
+                spam.Target = target;
+                spam.Count = count;
+                spam.Run();
+            }
+        }
+
+        static void RunThreads()
+        {
+            for (int i = 0; i < threads.Count; i++)
+            {
+                threads[i].Start();
+            }
+        }
+
+        static void AutoInvokeTest()
+        {
+            threads.Add(new Thread(() => OnRaise.Event += HandleRaise));
+
+            for (int i = 1; i < threadCount; i++)
+            {
+                threads.Add(new Thread(Raise));
+            }
+
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket.Connect(target);
+
+            packetConnection = new TCPPacketConnection(socket);
+            packetConnection.Logger = logger;
+            packetConnection.InitializeCrypto(new RSALegacyCrypto(true));
+            packetConnection.Disconnect();
+            packetConnection.OnDisconnect += HandleDisconnect;
         }
 
         static private void Raise()

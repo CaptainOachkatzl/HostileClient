@@ -4,7 +4,7 @@ using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
 using XSLibrary.Utility;
 
-namespace HostileClient
+namespace HostileClient.Spam
 {
     class CryptoHandshakeSpam : ConnectionSpam
     {
@@ -16,7 +16,6 @@ namespace HostileClient
 
         protected override void CreateActions(Socket socket)
         {
-
             Connection = new TCPPacketConnection(socket);
             Connection.Logger = Logger;
         }
