@@ -1,9 +1,9 @@
 ﻿using HostileClient.Spam;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
@@ -19,17 +19,20 @@ namespace HostileClient
         static Logger logger = new LoggerConsole();
         static IPEndPoint target = new IPEndPoint(IPAddress.Parse("192.168.0.100"), 22222);
         static List<ISpam> spams = new List<ISpam>();
+        static int count = 100;
         static DualConnection dualConnection = null;
         static TCPPacketConnection packetConnection = null;
         static List<Thread> threads = new List<Thread>();
         static int threadCount = 4;
         static bool m_abort = false;
         static ManualResetEvent threadGo = new ManualResetEvent(false);
+        static Stopwatch stopwatch = new Stopwatch();
 
         static TestEvent OnRaise = new TestEvent();
 
         static void Main(string[] args)
         {
+            CreateSpam();
 
             while (Console.In.ReadLine() != "exit")
             {
@@ -38,13 +41,22 @@ namespace HostileClient
                 m_abort = false;
 
                 RunThreads();
-                StartSpam(100);
+
+                InitSpam();
+
+                stopwatch.Restart();
+                StartSpam();
+                stopwatch.Stop();
+
+                logger.Log(LogLevel.Priority, "Elapsed time: {0}", stopwatch.Elapsed.ToString());
+
+
             }
 
             Disconnect();
         }
 
-        static void StartSpam(int count)
+        static void CreateSpam()
         {
             //spams.Add(new ConnectionSpam());
             //spams.Add(new BigDataSpam());
@@ -56,6 +68,21 @@ namespace HostileClient
                 spam.Logger = logger;
                 spam.Target = target;
                 spam.Count = count;
+            }
+        }
+
+        static void InitSpam()
+        {
+            foreach (ISpam spam in spams)
+            {
+                spam.Initialize();
+            }
+        }
+
+        static void StartSpam()
+        {
+            foreach (ISpam spam in spams)
+            {
                 spam.Run();
             }
         }
