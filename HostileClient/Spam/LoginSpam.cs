@@ -19,7 +19,20 @@ namespace HostileClient.Spam
             {
                 connectors[i] = new AccountConnector();
                 connectors[i].Logger = Logger;
-                connectors[i].Crypto = i % 3 != 0 ? CryptoType.RSALegacy : CryptoType.EC;
+                connectors[i].Crypto = /*i % 3 != 0 ?*/ CryptoType.RSALegacy; // : CryptoType.EC;
+
+                switch (i % 3)
+                {
+                    case 0:
+                        connectors[i].Login = "adrian hackerman";
+                        break;
+                    case 1:
+                        connectors[i].Login = "business casual";
+                        break;
+                    default:
+                        connectors[i].Login = "nerd kek";
+                        break;
+                }
             }
 
             for (int i = 0; i < finishEvents.Length; i++)
@@ -30,7 +43,18 @@ namespace HostileClient.Spam
 
         protected override void SpamAction(int index)
         {
-            connectors[index].ConnectAsync(Target, (connection) => { finishEvents[index].Set(); connection.Disconnect(); }, () => { finishEvents[index].Set(); });
+            connectors[index].ConnectAsync
+                (
+                Target, 
+                (connection) =>
+                {
+                    Logger.Log(LogLevel.Priority, "Connected successfully.");
+                    finishEvents[index].Set();
+                    Thread.Sleep(1000);
+                    connection.Disconnect();
+                },
+                () => { finishEvents[index].Set();
+                });
         }
 
         protected override void FinalizeActions()
