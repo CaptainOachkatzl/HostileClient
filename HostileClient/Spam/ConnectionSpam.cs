@@ -3,7 +3,7 @@ using XSLibrary.Utility;
 
 namespace HostileClient.Spam
 {
-    class ConnectionSpam : ISpam
+    class ConnectionSpam : NetworkSpam
     {
         public ConnectionSpam()
         {

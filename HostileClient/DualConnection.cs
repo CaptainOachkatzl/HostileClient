@@ -3,16 +3,17 @@ using System.Net;
 using System.Net.Sockets;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connections;
+using XSLibrary.ThreadSafety.Events;
 using XSLibrary.Utility;
 
 namespace HostileClient
 {
     public class DualConnection
     {
-        public event OnDisconnectEvent.EventHandle OnDisconnect
+        public event IEvent<object, EndPoint>.EventHandle OnDisconnect
         {
-            add { tcpConnetion.OnDisconnect += value; }
-            remove { tcpConnetion.OnDisconnect -= value; }
+            add { tcpConnetion.OnDisconnect.Event += value; }
+            remove { tcpConnetion.OnDisconnect.Event -= value; }
         }
 
         TCPPacketConnection tcpConnetion;

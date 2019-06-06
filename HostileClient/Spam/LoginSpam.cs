@@ -5,7 +5,7 @@ using XSLibrary.Utility;
 
 namespace HostileClient.Spam
 {
-    class LoginSpam : ISpam
+    class LoginSpam : NetworkSpam
     {
         AccountConnector[] connectors;
         ManualResetEvent[] finishEvents;

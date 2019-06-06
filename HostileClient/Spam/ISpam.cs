@@ -5,7 +5,6 @@ namespace HostileClient.Spam
 {
     public abstract class ISpam
     {
-        public EndPoint Target { get; set; }
         public int Count { get; set; } = 1;
         public Logger Logger { get; set; } = Logger.NoLog;
 
@@ -28,5 +27,11 @@ namespace HostileClient.Spam
         protected virtual void FinalizeActions()
         {
         }
+    }
+
+
+    public abstract class NetworkSpam : ISpam
+    {
+        public EndPoint Target { get; set; }
     }
 }
