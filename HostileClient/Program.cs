@@ -22,7 +22,7 @@ namespace HostileClient
         static Logger logger = new LoggerConsole();
         static IPEndPoint target = new IPEndPoint(IPAddress.Parse("192.168.0.100"), 22222);
         static List<ISpam> spams = new List<ISpam>();
-        static int count = 1000;
+        static int count = 100000;
         static DualConnection dualConnection = null;
         static TCPPacketConnection packetConnection = null;
         static List<Thread> threads = new List<Thread>();
@@ -94,7 +94,7 @@ namespace HostileClient
             //spams.Add(new BigDataSpam());
             //spams.Add(new RandomDataSpam());
             //spams.Add(new LoginSpam());
-            spams.Add(new AccountDataBaseSpam());
+            spams.Add(new AccountCreationSpam());
 
             foreach (ISpam spam in spams)
             {

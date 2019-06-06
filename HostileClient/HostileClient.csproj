@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DualConnection.cs" />
+    <Compile Include="Spam\AccountCreationSpam.cs" />
     <Compile Include="Spam\AccountDataBaseSpam.cs" />
     <Compile Include="Spam\ConnectionSpam.cs" />
     <Compile Include="Spam\BigDataSpam.cs" />
