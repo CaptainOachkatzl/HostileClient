@@ -1,4 +1,5 @@
-﻿using System.Threading;
+using System;
+using System.Threading;
 using XSLibrary.Cryptography.ConnectionCryptos;
 using XSLibrary.Network.Connectors;
 using XSLibrary.Utility;
@@ -10,6 +11,8 @@ namespace HostileClient.Spam
         AccountConnector[] connectors;
         ManualResetEvent[] finishEvents;
 
+        static Random rnd = new Random(1232343254);
+
         public override void Initialize()
         {
             connectors = new AccountConnector[Count];
@@ -19,7 +22,7 @@ namespace HostileClient.Spam
             {
                 connectors[i] = new AccountConnector();
                 connectors[i].Logger = Logger;
-                connectors[i].Crypto = /*i % 3 != 0 ?*/ CryptoType.RSALegacy; // : CryptoType.EC;
+                connectors[i].Crypto = /*i % 3 != 0 ?*/ CryptoType.EC25519; // : CryptoType.EC;
 
                 switch (i % 3)
                 {
@@ -49,8 +52,16 @@ namespace HostileClient.Spam
                 (connection) =>
                 {
                     Logger.Log(LogLevel.Priority, "Connected successfully.");
+
+                    while (connection.Connected)
+                    {
+                        int dataSize = rnd.Next(10, 4096);
+                        Logger.Log(LogLevel.Priority, "Send data with {0} bytes.", dataSize);
+                        connection.Send(RandomDataSpam.GenerateRandomData(dataSize));
+                    }
+
                     finishEvents[index].Set();
-                    Thread.Sleep(1000);
+
                     connection.Disconnect();
                 },
                 () => { finishEvents[index].Set();
