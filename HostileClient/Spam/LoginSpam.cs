@@ -37,15 +37,12 @@ namespace HostileClient.Spam
                         break;
                 }
             }
-
-            for (int i = 0; i < finishEvents.Length; i++)
-            {
-                finishEvents[i] = new ManualResetEvent(false);
-            }
         }
 
         protected override void SpamAction(int index)
         {
+            finishEvents[index] = new ManualResetEvent(false);
+
             connectors[index].ConnectAsync
                 (
                 Target, 
